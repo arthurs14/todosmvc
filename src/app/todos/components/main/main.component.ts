@@ -10,8 +10,20 @@ import { FilterEnum } from 'src/app/todos/types/filter.enum';
 })
 export class MainComponent {
   visibleTodos$: Observable<TodoInterface[]> | undefined;
+  noTodoClass$: Observable<boolean> | undefined;
+  isAllTodosSelected$: Observable<boolean> | undefined;
 
   constructor(private todosService: TodosService) {
+    this.isAllTodosSelected$ = this.todosService.todos$.pipe(
+      map((todos) => todos.every((todo) => todo.isCompleted))
+    );
+
+    // will be used to hide or unhide section of todos
+    this.noTodoClass$ = this.todosService.todos$.pipe(
+      map((todos) => todos.length === 0)
+    );
+
+    // listens for changes to when we add or remove a todo
     this.visibleTodos$ = combineLatest([
       this.todosService.todos$,
       this.todosService.filter$,
@@ -27,5 +39,10 @@ export class MainComponent {
         }
       })
     );
+  }
+
+  toggleAllTodos(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.todosService.toggleAll(target.checked);
   }
 }

@@ -21,4 +21,15 @@ export class TodosService {
     // update todos list
     this.todos$.next(updatedTodos);
   }
+
+  toggleAll(isCompleted: boolean): void {
+    console.log('isCompleted :::', isCompleted);
+    const updatedTodos = this.todos$.getValue().map((todo) => {
+      return {
+        ...todo,
+        isCompleted,
+      };
+    });
+    console.log('updatedTodos :::', updatedTodos);
+  }
 }
