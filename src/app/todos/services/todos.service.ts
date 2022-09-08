@@ -32,4 +32,8 @@ export class TodosService {
     });
     console.log('updatedTodos :::', updatedTodos);
   }
+
+  changeFilter(filterName: FilterEnum): void {
+    this.filter$.next(filterName);
+  }
 }
